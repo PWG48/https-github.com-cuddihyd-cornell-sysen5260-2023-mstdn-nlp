@@ -51,7 +51,18 @@ services:
     ports:
       - '8888:8888'
     command: jupyter lab --allow-root --NotebookApp.token=secret123 --ip 0.0.0.0 --no-browser
-  
+  extractor:
+    user: root
+    working_dir: /opt/app
+    build:
+      context: ./tools
+    volumes:
+      - datalake:/opt/data
+    environment:
+      - PYTHONPATH=/opt/spark/python:/opt/spark/python/lib/py4j-0.10.9.7-src.zip
+    ports: 
+      - '8008:8008'
+
 volumes:
   datalake:
   warehouse:
