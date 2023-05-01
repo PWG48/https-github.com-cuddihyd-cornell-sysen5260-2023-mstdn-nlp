@@ -26,7 +26,7 @@ spark = SparkSession.builder\
     .getOrCreate() 
 
 os.listdir(DatalakeLocation)
-NumToots = 0
+
 
 Schema = StructType([ \
     StructField("id",StringType(),True), \
@@ -39,11 +39,13 @@ AllData = spark.createDataFrame(data=emptyRDD, schema=Schema)
 
 # run spark in infinite loop
 while True: 
-
+    
+    NumToots = 0
     # grab all json files from the datalake
     for folder, subs, files in os.walk(DatalakeLocation):
         for filename in files:
-            
+            if filename == 'java_opts.txt':
+                continue
             # read json file
             ThisFile = os.path.join(folder, filename) 
             words = spark.read.json(ThisFile)
@@ -96,8 +98,8 @@ while True:
             #print("Read in " + str(NumToots) + " toots")
             
         # shortcut to end collection early to run td-idf on less data    
-        #if NumToots >= 10:
-            #break
+        if NumToots >= 10:
+            break
         
     ## perform the TD-IDF
     # make the data structure to run on

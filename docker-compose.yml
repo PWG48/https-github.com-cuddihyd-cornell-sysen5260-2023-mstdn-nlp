@@ -62,7 +62,18 @@ services:
       - PYTHONPATH=/opt/spark/python:/opt/spark/python/lib/py4j-0.10.9.7-src.zip
     ports: 
       - '8008:8008'
-
+  tfidf:
+    user: root
+    working_dir: /opt/app
+    build:
+      context: ./sparkcode
+    volumes:
+      - datalake:/opt/data
+      - warehouse:/opt/warehouse
+    environment:
+      - PYTHONPATH=/opt/spark/python:/opt/spark/python/lib/py4j-0.10.9.7-src.zip
+    ports: 
+      - '8007:8007'
 volumes:
   datalake:
   warehouse:
